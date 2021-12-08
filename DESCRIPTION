@@ -1,0 +1,10 @@
+Package: ciperm
+Type: Package
+Title: Confidence intervals using permutation tests
+Version: 0.1.0
+Author: Niels Olsen <nalo@dtu.dk>
+Maintainer: Niels Olsen <nalo@dtu.dk>
+Description: The recent paper https://arxiv.org/abs/2111.14966 presents a new method on non-parametric confidence intervals. This R package contains an easy-to-use implementation said method.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
