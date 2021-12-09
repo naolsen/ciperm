@@ -20,7 +20,7 @@ make.twosample.stat <- function(f) {
 
 #' Confidence interval for the two-sample difference in means
 #'
-#' Calculates the permutation-test based for the difference in means.
+#' Calculates the permutation-test based confidence interval for the difference in means.
 #'
 #' @param x Observations from sample 1
 #' @param y Observations from sample 2

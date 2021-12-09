@@ -19,5 +19,6 @@ Constructs confidence intervals at the specified level.
 See \link{ciperm0} for additional parameters.
 }
 \seealso{
-\link{ciperm.twosample} for a user-friendly version for the two-sample case
+\link{ciperm.twosample} for a user-friendly version for the two-sample case.
+\link{ciperm.linreg} for a user-friendly version for the linear regression case.
 }

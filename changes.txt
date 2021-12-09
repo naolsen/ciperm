@@ -1,0 +1,6 @@
+Changelog
+
+I will do my best to ensure all changes are included here
+
+08-12-21: Univariate confidence intervals, two-sample case
+09-12-21: Linear regression

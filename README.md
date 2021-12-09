@@ -9,8 +9,11 @@ The general univariate case (ie. a model and a test that satisifes the condition
 
 ```ciperm0```: The workhorse that performs the actual permutation scheme
 
-```ciperm```: Computes the actual confidence interval 
+```ciperm```: Computes the confidence interval 
 (ie. by using quantiles from ```ciperm0```)
 
 ```ciperm.twosample```: 
 User-friendly function for computing the two-sample confidence interval. 
+
+```ciperm.linreg```: 
+User-friendly function for computing confidence interval for the slope in linear regression. 

@@ -54,7 +54,8 @@ ciperm0 <- function(y, phi, M = 1000, statistic, bounds, estimate, infinities = 
 #'
 #' @return Vector of lower and upper ends of the confidence interval
 #'
-#' @seealso \link{ciperm.twosample} for a user-friendly version for the two-sample case
+#' @seealso \link{ciperm.twosample} for a user-friendly version for the two-sample case.
+#' \link{ciperm.linreg} for a user-friendly version for the linear regression case.
 #'
 ciperm <-  function(y, phi, M = 1000, statistic, bounds, estimate, level = 0.95) {
   lus <- ciperm0(y, phi, M = M, statistic = statistic, bounds = bounds, estimate = estimate)

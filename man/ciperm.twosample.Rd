@@ -17,7 +17,7 @@ ciperm.twosample(x, y, ...)
 Vector of lower and upper ends of the confidence interval
 }
 \description{
-Calculates the permutation-test based for the difference in means.
+Calculates the permutation-test based confidence interval for the difference in means.
 }
 \details{
 It is the confidence interval for mean(y) - mean(x)
