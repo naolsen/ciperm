@@ -19,7 +19,7 @@ ciperm0(y, phi, M = 1000, statistic, bounds, estimate, infinities = FALSE)
 
 \item{estimate}{Parameter estimate. Optional}
 
-\item{infinities}{If TRUE set l_m to infinity, when uniroot fails to find a root  (Not implemented yet).
+\item{infinities}{If TRUE set l_m = -Inf and u_m = Inf, when uniroot fails to find a root.
 If FALSE, the procedure fails with an error.}
 }
 \value{

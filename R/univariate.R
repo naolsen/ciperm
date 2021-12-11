@@ -9,7 +9,7 @@
 #' @param statistic Test statistic
 #' @param bounds Bounds forwarded to \code{uniroot} in the search for l and u values.
 #' @param estimate Parameter estimate. Optional
-#' @param infinities If TRUE set l_m to infinity, when uniroot fails to find a root (Not implemented yet).
+#' @param infinities If TRUE set l_m = -Inf and u_m = Inf, when uniroot fails to find a root.
 #' If FALSE, the procedure fails with an error.
 #'
 #' @return Matrix of dim M x 2
@@ -31,15 +31,20 @@ ciperm0 <- function(y, phi, M = 1000, statistic, bounds, estimate, infinities = 
     ## make some check that estimate is sensible..
   }
 
-
   ## Permutation scheme
   lus <- matrix(, M, 2)
   for (j in 1:M) {
     s <- sample(N)
-    lus[j,] <- c(uniroot(function(mu) statistic((y - phi(mu))[s]) - statistic(y - phi(mu)),
-                         lower = lower, upper = estimate)$root,
-                 uniroot(function(mu) statistic((y - phi(mu))[s]) - statistic(y - phi(mu)),
-                         lower = estimate, upper = upper)$root)
+    if (infinities)
+      lus[j,] <- c(tryCatch(uniroot(function(mu) statistic((y - phi(mu))[s]) - statistic(y - phi(mu)),
+                         lower = lower, upper = estimate)$root, error = function(e) -Inf),
+                 tryCatch(uniroot(function(mu) statistic((y - phi(mu))[s]) - statistic(y - phi(mu)),
+                         lower = estimate, upper = upper)$root, error = function(e) Inf))
+    else
+      lus[j,] <- c(uniroot(function(mu) statistic((y - phi(mu))[s]) - statistic(y - phi(mu)),
+                                  lower = lower, upper = estimate)$root,
+                          uniroot(function(mu) statistic((y - phi(mu))[s]) - statistic(y - phi(mu)),
+                                  lower = estimate, upper = upper)$root)
   }
   lus
 }
@@ -57,10 +62,12 @@ ciperm0 <- function(y, phi, M = 1000, statistic, bounds, estimate, infinities = 
 #' @seealso \link{ciperm.twosample} for a user-friendly version for the two-sample case.
 #' \link{ciperm.linreg} for a user-friendly version for the linear regression case.
 #'
-ciperm <-  function(y, phi, M = 1000, statistic, bounds, estimate, level = 0.95) {
-  lus <- ciperm0(y, phi, M = M, statistic = statistic, bounds = bounds, estimate = estimate)
+ciperm <-  function(y, phi, M = 1000, statistic, bounds, estimate, level = 0.95, infinities = FALSE) {
+  lus <- ciperm0(y, phi, M = M, statistic = statistic, bounds = bounds, estimate = estimate, infinities = infinities)
 
   out <- c(quantile(lus[,1], probs = 1-level), quantile(lus[,2], probs = level))
+  if (infinities && (out[1] == -Inf || out[2] == Inf))
+    warning("Confidence interval contains infinity. Did you make your bounds wide enough?")
   names(out) <- c("lower", "upper")
   out
 }
