@@ -19,3 +19,6 @@ Calculates alpha_multiple from the output of \link{ciperm0.multi}
 \description{
 Joint coverage level
 }
+\details{
+Note that the computational cost is O(2^K)
+}

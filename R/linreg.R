@@ -9,19 +9,20 @@ make.linreg.stat <- function(x) {
   function(eps) abs(sum((x - mean(x))*(eps - mean(eps))))
 }
 
-#' Confidence interval for slope parameter in linear regression
+
+#' Confidence interval for the slope parameter in linear regression
 #'
 #' Calculates the permutation-test based confidence interval for \eqn{\beta_1} in the linear regression model
-#' \deqn{y = \beta_0 + \beta_1 x + \epsilon}
+#' \deqn{y = \beta_0 + \beta_1 x + \epsilon}. Works in both for univariate and multivariate cases (but \code{x} must be univariate).
 #'
-#' @param x Values of the independent variable
-#' @param y Values of the dependent variable
+#' @param x Values of the independent variable. A numeric vector of length N.
+#' @param y Values of the dependent variable. A numeric vector of length N or a matrix of dim N x K.
 #' @param bounds Bounds forwarded to \code{uniroot} in the search for l and u values.
-#' @param ... Additional arguments to \link{ciperm}
+#' @param ... Additional arguments to \link{ciperm} or \link{ciperm.multi}
 #'
-#' @return Vector of lower and upper ends of the confidence interval
+#' @return Vector or array of lower and upper ends of the confidence interval
 #'
-#' @seealso \link{ciperm}
+#' @seealso \link{ciperm},  \link{ciperm.multi}
 #'
 #' @examples
 #' x <- runif(20, -1, 1)
@@ -33,5 +34,8 @@ ciperm.linreg <- function(x, y, bounds, ...) {
   ff <- make.linreg.stat(x)
   phif <- make.linear.cov.function(x)
 
+  if (ncol(as.matrix(y)) == 1)
   ciperm(y, phif, statistic = ff, bounds = bounds, ...)
+
+  else ciperm.multi(y, phif, statistic = ff, bounds = bounds, ...)
 }

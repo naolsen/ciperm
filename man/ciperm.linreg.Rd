@@ -2,25 +2,25 @@
 % Please edit documentation in R/univariate.R
 \name{ciperm.linreg}
 \alias{ciperm.linreg}
-\title{Confidence interval for slope parameter in linear regression}
+\title{Confidence interval for the slope parameter in linear regression}
 \usage{
 ciperm.linreg(x, y, bounds, ...)
 }
 \arguments{
-\item{x}{Values of the independent variable}
+\item{x}{Values of the independent variable. A numeric vector of length N.}
 
-\item{y}{Values of the dependent variable}
+\item{y}{Values of the dependent variable. A numeric vector of length N or a matrix of dim N x K.}
 
 \item{bounds}{Bounds forwarded to \code{uniroot} in the search for l and u values.}
 
-\item{...}{Additional arguments to \link{ciperm}}
+\item{...}{Additional arguments to \link{ciperm} or \link{ciperm.multi}}
 }
 \value{
-Vector of lower and upper ends of the confidence interval
+Vector or array of lower and upper ends of the confidence interval
 }
 \description{
 Calculates the permutation-test based confidence interval for \eqn{\beta_1} in the linear regression model
-\deqn{y = \beta_0 + \beta_1 x + \epsilon}
+\deqn{y = \beta_0 + \beta_1 x + \epsilon}. Works in both for univariate and multivariate cases (but \code{x} must be univariate).
 }
 \examples{
 x <- runif(20, -1, 1)
@@ -30,5 +30,5 @@ ciperm.linreg(x, y, bounds = c(-5, 6))
 
 }
 \seealso{
-\link{ciperm}
+\link{ciperm},  \link{ciperm.multi}
 }

@@ -7,17 +7,18 @@
 ciperm.twosample(x, y, ...)
 }
 \arguments{
-\item{x}{Observations from sample 1}
+\item{x}{Observations from sample 1. A numeric vector of length N_1 or a matrix of dim N_1 x K.}
 
-\item{y}{Observations from sample 2}
+\item{y}{Observations from sample 2. A numeric vector of length N_2 or a matrix of dim N_2 x K.}
 
-\item{...}{Additional arguments to \link{ciperm}}
+\item{...}{Additional arguments to \link{ciperm} or \link{ciperm.multi}}
 }
 \value{
-Vector of lower and upper ends of the confidence interval
+Vector or array of lower and upper ends of the confidence interval
 }
 \description{
 Calculates the permutation-test based confidence interval for the difference in means.
+Works in both for univariate and multivariate cases.
 }
 \details{
 It is the confidence interval for mean(y) - mean(x)
@@ -30,5 +31,5 @@ ciperm.twosample(x,y, M = 2000, level = 0.99) ## 99\% confidence interval, 2000 
 
 }
 \seealso{
-\link{ciperm}
+\link{ciperm},  \link{ciperm.multi}
 }

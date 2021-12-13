@@ -114,3 +114,60 @@ alpha.multi <- function(lows, ups, alpha) {
     dds
     max(dds)/M
 }
+
+
+#' Adjusted (multivariate) confidence intervals
+#'
+#' Adjust coverage level such that joint coverage level corresponds
+#'
+#' @param level
+#' @param tol tolerance for reaching \code{level}.
+#' @param include_unadjusted Include unadjusted confidence intervals as an attribute?
+#'
+#' @details This function uses output from \code{ciperm0.multi}.
+#' In a simple bisection algorithm, the confidence level is adjusted until the joint coverage level (form \code{alpha.multi}) is \code{code}.
+#'
+#' @return Adjusted confidence intervals with the adjusted confidence level as an attribute.
+#' @export
+#'
+#' @seealo \link{alpha.multi}
+adjusted_ci <- function(lus, level = 0.95, tol = 0.001, include_unadjusted = TRUE) {
+
+  K <- dim(lus)[2]
+
+  out <- matrix(, 2, K)
+
+  for (j in 1:K) {
+    out[,j] <- c(quantile(lus[,j,1], probs = 1-level), quantile(lus[,j,2], probs = level))
+  }
+  rownames(out) <- c("lower", "upper")
+
+  a_target <- 1-level
+  a_max <- a_target
+  a_min <- 0
+  a <- alpha.multi(lus[,,1], lus[,,2], 1-level)
+  a_new <- a_max
+
+  while(abs(a -a_target) > tol) {
+
+    if (a_max - a_min < 1e-7) stop("Convergence error!")
+
+    a_new <- (a_min + a_max) / 2
+    a <- alpha.multi(lus[,,1], lus[,,2], a_new)
+
+    if (a < a_target) a_min <- a_new
+    else a_max <- a_new
+  }
+
+  out2 <- matrix(, 2, K)
+
+  for (j in 1:K) {
+    out2[,j] <- c(quantile(lus[,j,1], probs = a_new), quantile(lus[,j,2], probs = 1-a_new))
+  }
+  rownames(out2) <- c("lower", "upper")
+
+  attr(out2, 'alpha_adjusted') <- a_new
+
+  if (include_unadjusted) attr(out2, 'unadjusted.ci') <- out
+  out2
+}
