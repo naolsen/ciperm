@@ -6,3 +6,4 @@ I will do my best to ensure all changes are included here
 09-12-21: Linear regression
 10-12-21: Multivariate confidence regions and joint confidence level. Allow infinities in the univariate permutation tests.
 13-12-21: ciperm.twosample and ciperm.linreg now also works with multivariate input. Added ci_adjusted, which adjusts confidence intervals.
+17-12-21: Allow infinities in the multivariate case.

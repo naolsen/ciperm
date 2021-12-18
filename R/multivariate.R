@@ -12,7 +12,7 @@
 #' @return array of dim M x K x 2
 #' @export
 #'
-ciperm0.multi <- function(y, phi, M = 1000, statistic, bounds, estimate) {
+ciperm0.multi <- function(y, phi, M = 1000, statistic, bounds, estimate,  infinities = FALSE) {
 
   if (!is.matrix(y) || ncol(y) == 1) stop("Data is of incorrect format")
 
@@ -25,7 +25,7 @@ ciperm0.multi <- function(y, phi, M = 1000, statistic, bounds, estimate) {
 
   ## Missing estimate, optimize and find out
   if (missing(estimate)) {
-  esetimate <- numeric(K)
+  estimate <- numeric(K)
   for (k in 1:K) {
     estimate[k] <- optimize(function(mu) statistic(y[,k] - phi(mu)), interval = bounds)$minimum
     if (estimate[k] < lower + .Machine$double.eps^0.25 || estimate[k] > upper - .Machine$double.eps^0.25 )
@@ -39,7 +39,14 @@ ciperm0.multi <- function(y, phi, M = 1000, statistic, bounds, estimate) {
   for (j in 1:M) {
     s <- sample(N)
     for (k in 1:K) {
-      lusm[j,k,] <- c(uniroot(function(mu) statistic((y[,k] - phi(mu))[s]) - statistic(y[,k] - phi(mu)),
+      if (infinities)
+        lusm[j,k,] <- c(tryCatch(uniroot(function(mu) statistic((y[,k] - phi(mu))[s]) - statistic(y[,k] - phi(mu)),
+                                      lower = lower, upper = estimate[k])$root, error = function(e) -Inf),
+                     tryCatch(uniroot(function(mu) statistic((y[,k] - phi(mu))[s]) - statistic(y[,k] - phi(mu)),
+                                      lower = estimate[k], upper = upper)$root, error = function(e) Inf))
+
+      else
+        lusm[j,k,] <- c(uniroot(function(mu) statistic((y[,k] - phi(mu))[s]) - statistic(y[,k] - phi(mu)),
                               lower = lower, upper = estimate[k])$root,
                       uniroot(function(mu) statistic((y[,k] - phi(mu))[s]) - statistic(y[,k] - phi(mu)),
                               lower = estimate[k], upper = upper)$root)
@@ -64,8 +71,8 @@ ciperm0.multi <- function(y, phi, M = 1000, statistic, bounds, estimate) {
 #' @seealso \link{ciperm}
 #'
 ciperm.multi <- function(y, phi, M = 1000, statistic, bounds, estimate, level = 0.95,
-                         multilevel = TRUE) {
-  lus <- ciperm0.multi(y, phi, M = M, statistic = statistic, bounds = bounds, estimate = estimate)
+                         multilevel = TRUE, infinities = FALSE) {
+  lus <- ciperm0.multi(y, phi, M = M, statistic = statistic, bounds = bounds, estimate = estimate, infinities = infinities)
   dl <- dim(lus)
   K <- dl[2]
 
@@ -74,8 +81,9 @@ ciperm.multi <- function(y, phi, M = 1000, statistic, bounds, estimate, level = 
   for (j in 1:K) {
     out[,j] <- c(quantile(lus[,j,1], probs = 1-level), quantile(lus[,j,2], probs = level))
   }
-
   rownames(out) <- c("lower", "upper")
+  if (infinities && any(is.infinite(out)))
+    warning("Confidence interval contains infinity. Did you make your bounds wide enough?")
   if (multilevel) attr(out, "alpha_multiple") <- alpha.multi(lus[,,1], lus[,,2], 1-level)
   out
 }
