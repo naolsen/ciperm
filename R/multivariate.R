@@ -62,8 +62,10 @@ ciperm0.multi <- function(y, phi, M = 1000, statistic, bounds, estimate,  infini
 #'
 #' @param level Coverage level (i.e. 1- \eqn{\alpha}).
 #' @param multilevel Calculate the joint coverage level using \link{alpha.multi}?
+#' @param adjusted.ci Calculate the adjusted confidence interval using \link{adjusted_ci}?
 #'
 #' @details See \link{ciperm0.multi} for additional parameters.
+#' The outputs from \code{multilevel} and \code{adjusted.ci} are attached as attributes (when the parameters are set to TRUE).
 #'
 #' @return A 2 x K array of K confidence intervals.
 #' @export
@@ -85,6 +87,11 @@ ciperm.multi <- function(y, phi, M = 1000, statistic, bounds, estimate, level = 
   if (infinities && any(is.infinite(out)))
     warning("Confidence interval contains infinity. Did you make your bounds wide enough?")
   if (multilevel) attr(out, "alpha_multiple") <- alpha.multi(lus[,,1], lus[,,2], 1-level)
+
+  if (adjusted.ci) {
+    out2 <- adjusted_ci(lus, level = level, include_unadjusted = FALSE)
+    attr(out, 'adjusted.ci') <- out2
+  }
   out
 }
 

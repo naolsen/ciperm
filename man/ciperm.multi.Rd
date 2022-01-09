@@ -12,13 +12,17 @@ ciperm.multi(
   bounds,
   estimate,
   level = 0.95,
-  multilevel = TRUE
+  multilevel = TRUE,
+  adjusted.ci = FALSE,
+  infinities = FALSE
 )
 }
 \arguments{
 \item{level}{Coverage level (i.e. 1- \eqn{\alpha}).}
 
 \item{multilevel}{Calculate the joint coverage level using \link{alpha.multi}?}
+
+\item{adjusted.ci}{Calculate the adjusted confidence interval using \link{adjusted_ci}?}
 }
 \value{
 A 2 x K array of K confidence intervals.
@@ -28,6 +32,7 @@ Constructs confidence intervals at the specified level, and optionally calculate
 }
 \details{
 See \link{ciperm0.multi} for additional parameters.
+The outputs from \code{multilevel} and \code{adjusted.ci} are attached as attributes (when the parameters are set to TRUE).
 }
 \seealso{
 \link{ciperm}
