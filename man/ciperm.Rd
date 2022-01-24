@@ -7,7 +7,7 @@
 ciperm(y, phi, M = 1000, statistic, bounds, estimate, level = 0.95)
 }
 \arguments{
-\item{level}{Confidence level (i.e. 1- \alpha).}
+\item{level}{Confidence level (i.e. 1- \eqn{\alpha}).}
 }
 \value{
 Vector of lower and upper ends of the confidence interval
