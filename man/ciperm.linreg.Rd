@@ -28,6 +28,17 @@ y <- 3 + 0.8*x + rt(20, df = 4)
 
 ciperm.linreg(x, y, bounds = c(-5, 6))
 
+
+## Multivariate example (requires package \code{mvtnorm})
+library(mvtnorm)
+x <- runif(20, -1, 1)
+sigma <- matrix(0.80, 4, 4)
+diag(sigma) <- 1
+
+y <- 3 + 0.8*x + rmvnorm(20, mean = rep(0,4), sigma = sigma)
+
+ciperm.linreg(x, y, bounds = c(-7, 8))
+
 }
 \seealso{
 \link{ciperm},  \link{ciperm.multi}

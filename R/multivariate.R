@@ -73,7 +73,7 @@ ciperm0.multi <- function(y, phi, M = 1000, statistic, bounds, estimate,  infini
 #' @seealso \link{ciperm}
 #'
 ciperm.multi <- function(y, phi, M = 1000, statistic, bounds, estimate, level = 0.95,
-                         multilevel = TRUE, infinities = FALSE) {
+                         multilevel = TRUE, adjusted.ci = FALSE, infinities = FALSE) {
   lus <- ciperm0.multi(y, phi, M = M, statistic = statistic, bounds = bounds, estimate = estimate, infinities = infinities)
   dl <- dim(lus)
   K <- dl[2]

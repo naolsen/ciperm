@@ -30,6 +30,16 @@ make.linreg.stat <- function(x) {
 #'
 #' ciperm.linreg(x, y, bounds = c(-5, 6))
 #'
+#' ## Multivariate example (requires package \code{mvtnorm})
+#' library(mvtnorm)
+#' x <- runif(20, -1, 1)
+#' sigma <- matrix(0.80, 4, 4)
+#' diag(sigma) <- 1
+#'
+#' y <- 3 + 0.8*x + rmvnorm(20, mean = rep(0,4), sigma = sigma)
+#'
+#' ciperm.linreg(x, y, bounds = c(-7, 8))
+#'
 ciperm.linreg <- function(x, y, bounds, ...) {
   ff <- make.linreg.stat(x)
   phif <- make.linear.cov.function(x)
